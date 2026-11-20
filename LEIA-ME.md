@@ -43,9 +43,11 @@ transparente (o nome precisa continuar `carro.png`). O reflexo no chão é gerad
 
 ## Tela de boas-vindas
 Ao abrir, aparece "Bem-vindo a bordo" enquanto o papel de parede, o carro e os apps carregam
-(some sozinha: no mínimo 1,5 s, no máximo 5 s). Para ter um logo no meio, coloque um PNG
+(some sozinha: no mínimo 2 s, no máximo 5 s). Para ter o logo GRANDE no meio, coloque um PNG
 com fundo transparente em `app\src\main\res\drawable-nodpi\logo.png`; sem ele aparece um
-emblema simples "CIVIC". Os textos ficam em `tela/Splash.kt`.
+emblema simples "CIVIC". O logo ganha acabamento cromado e um reflexo de luz; para manter
+as cores originais do PNG, troque `CROMADO` para `false` em `tela/Splash.kt` (lá também ficam
+o tamanho `ALTURA_LOGO` e os textos).
 
 ## 5. A tela (igual ao modelo)
 Tudo é posicionado com as coordenadas do modelo (1358 x 681) e esticado para o

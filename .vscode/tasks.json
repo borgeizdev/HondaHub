@@ -12,13 +12,16 @@
       "label": "Espelhar tela (scrcpy)",
       "type": "shell",
       "command": "scrcpy --stay-awake",
+      "options": {
+        "env": { "ADB": "${env:LOCALAPPDATA}\\Android\\Sdk\\platform-tools\\adb.exe" }
+      },
       "isBackground": true,
       "problemMatcher": []
     },
     {
       "label": "Ver erros do app (logcat)",
       "type": "shell",
-      "command": "adb logcat -v brief AndroidRuntime:E *:S",
+      "command": "& \"$env:LOCALAPPDATA\\Android\\Sdk\\platform-tools\\adb.exe\" logcat -v brief AndroidRuntime:E *:S",
       "isBackground": true,
       "problemMatcher": []
     }

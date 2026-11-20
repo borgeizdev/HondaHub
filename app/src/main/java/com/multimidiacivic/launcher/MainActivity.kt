@@ -117,8 +117,8 @@ class MainActivity : Activity() {
 
     private fun pronto(parte: String) {
         if (!faltaCarregar.remove(parte) || faltaCarregar.isNotEmpty()) return
-        // Fica pelo menos 1,5 s para a animacao nao piscar
-        val resta = 1500 - (System.currentTimeMillis() - inicio)
+        // Fica pelo menos 2 s: da tempo do logo aparecer e do reflexo passar
+        val resta = 2000 - (System.currentTimeMillis() - inicio)
         if (resta > 0) splash?.postDelayed({ tirarSplash() }, resta) else tirarSplash()
     }
 
