@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.os.Looper
 import android.provider.Settings
 import android.view.View
 import android.widget.Toast
@@ -15,6 +16,7 @@ import com.multimidiacivic.launcher.dados.App
 import com.multimidiacivic.launcher.dados.Apps
 import com.multimidiacivic.launcher.dados.Tema
 import com.multimidiacivic.launcher.editor.Editor
+import com.multimidiacivic.launcher.gaveta.Gaveta
 import com.multimidiacivic.launcher.musica.EstadoMusica
 import com.multimidiacivic.launcher.musica.Musica
 import com.multimidiacivic.launcher.tela.Botao
@@ -47,6 +49,7 @@ class MainActivity : Activity() {
     private lateinit var tela: Tela
     private lateinit var fundo: Fundo
     private lateinit var editor: Editor
+    private lateinit var gaveta: Gaveta
     private val botoes = ArrayList<Botao>()
     private var todosApps: List<App> = emptyList()
     private var apps: List<App?> = emptyList()
@@ -69,7 +72,10 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(montarTela())
         aplicarTema(Ajustes.tema(this))
-        editor = Editor(this, { todosApps }, { apps }, { t -> aplicarTema(t) }, { distribuirApps() })
+        editor = Editor(this, { todosApps }, { apps }, { t -> aplicarTema(t) }, { distribuirApps() }, { cobre -> cobrirTela(cobre) })
+        gaveta = Gaveta(this, { todosApps }, { cobre -> cobrirTela(cobre) })
+        // Monta o lapis e a gaveta escondidos quando o app ficar ocioso: abrir fica instantaneo
+        Looper.myQueue().addIdleHandler { editor.preparar(); gaveta.preparar(); false }
 
         musica = Musica(this) { estado -> mostrarMusica(estado) }
         player.aoTocar = { musica.tocar() }
@@ -110,7 +116,7 @@ class MainActivity : Activity() {
         colocarIcone(Icone.Tipo.CONFIG, 67f, 42f) { abrirAjuste(Settings.ACTION_SETTINGS) }
         colocarIcone(Icone.Tipo.WIFI, 140f, 42f) { abrirAjuste(Settings.ACTION_WIFI_SETTINGS) }
         colocarIcone(Icone.Tipo.BLUETOOTH, 1217f, 42f) { abrirAjuste(Settings.ACTION_BLUETOOTH_SETTINGS) }
-        colocarIcone(Icone.Tipo.APPS, 1288f, 42f) { emBreve() }
+        colocarIcone(Icone.Tipo.APPS, 1288f, 42f) { gaveta.abrir() }
         colocarIcone(Icone.Tipo.EDITAR, 1287f, 618f) { editor.abrir() }
 
         // Relogio grande + data embaixo
@@ -153,6 +159,7 @@ class MainActivity : Activity() {
 
     override fun onStop() {
         unregisterReceiver(avisoHora)
+        gaveta.fechar() // abriu um app pela gaveta: ao voltar, cai na tela inicial
         super.onStop()
     }
 
@@ -185,6 +192,8 @@ class MainActivity : Activity() {
         Imagens.emSegundoPlano({ Apps.todos(applicationContext) }) { lista ->
             todosApps = lista
             distribuirApps()
+            editor.atualizarLista()
+            gaveta.atualizarLista()
         }
     }
 
@@ -195,6 +204,15 @@ class MainActivity : Activity() {
             val app = apps.getOrNull(i)
             b.texto = app?.nome ?: "Texto"
             b.apagado = app == null
+        }
+    }
+
+    /** Lapis ou gaveta aberto: esconde as pecas da tela (menos o papel de parede, que fica atras do veu). */
+    private fun cobrirTela(cobre: Boolean) {
+        val vis = if (cobre) View.INVISIBLE else View.VISIBLE
+        for (i in 0 until tela.childCount) {
+            val v = tela.getChildAt(i)
+            if (v !== fundo) v.visibility = vis
         }
     }
 
@@ -230,11 +248,19 @@ class MainActivity : Activity() {
         }
     }
 
+    /** Botao Home com a tela inicial ja aberta: fecha o que estiver por cima. */
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        gaveta.fechar()
+        editor.fechar()
+    }
+
     /** Botao Voltar NAO sai da tela inicial. */
     @Deprecated("Mantido de proposito: funciona em todas as versoes")
     @Suppress("DEPRECATION")
     override fun onBackPressed() {
-        // nao sai da tela inicial; so fecha / volta o painel do lapis
-        if (editor.aberto) editor.voltar()
+        // nao sai da tela inicial; so fecha a gaveta ou o painel do lapis
+        if (gaveta.aberto) gaveta.fechar()
+        else if (editor.aberto) editor.voltar()
     }
 }

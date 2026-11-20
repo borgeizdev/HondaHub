@@ -52,7 +52,7 @@ tamanho real da tela — para mexer em posição, veja `montarTela()` no `MainAc
 | Player | ▶ e ⏸ controlam a música de qualquer app. Nome e barra de progresso aparecem depois de tocar no nome e liberar **Acesso a notificações** (Android 5+) |
 | Engrenagem / Wi-Fi / Bluetooth | abrem os ajustes do Android (se a central deixar) |
 | Lápis | abre o painel **Personalizar**: escolher o app de cada um dos 6 botões, ou trocar o papel de parede (14 cores) |
-| Grade de apps | só visual por enquanto ("Em breve") |
+| Grade de apps | abre a **gaveta** com todos os apps da central (filtros Todos / Baixados / Do sistema). Tocar num app abre ele |
 
 ## Estrutura
 ```
@@ -68,6 +68,8 @@ app/src/main/java/com/multimidiacivic/launcher/
     Player.kt         caixa do player
   editor/
     Editor.kt         painel do lápis (apps dos botões / papel de parede)
+  gaveta/
+    Gaveta.kt         gaveta com todos os apps (botão de grade)
   musica/
     Musica.kt         controle da música dos outros apps (+ OuvinteNotificacoes)
   dados/
@@ -76,6 +78,8 @@ app/src/main/java/com/multimidiacivic/launcher/
   util/
     Fontes.kt         fontes Exo 2 (assets/fontes)
     Imagens.kt        carrega imagem em segundo plano
+    Icones.kt         ícones dos apps prontos como imagem (lápis e gaveta)
+    Pecas.kt          textos, caixas e grade de apps comuns aos dois painéis
 ```
 
 ## 6. Papéis de parede
