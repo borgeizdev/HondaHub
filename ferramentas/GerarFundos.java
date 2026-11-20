@@ -17,9 +17,16 @@ import javax.imageio.stream.ImageOutputStream;
  * Para criar uma cor nova, acrescente uma linha em TEMAS e a mesma cor em Temas.kt.
  *
  * A garagem e uma sala 3D de verdade (piso, parede do fundo, laterais e teto)
- * vista por uma camera na MESMA altura/horizonte da foto do carro (carro.png
+ * vista por uma camera na MESMA altura/horizonte/lente da foto do carro (carro.png
  * na posicao do launcher): assim o piso fica na perspectiva certa embaixo dele.
+ * Os numeros da camera e do carro (CAM, V0, F, CARRO_*) foram medidos na foto:
+ * pneus no chao, emblema, retrovisores, farois e lanterna, casados com as
+ * medidas de um Civic (entre-eixos 2,70 m, bitola 1,55 m, 4,65 x 1,80 m).
+ * O chao ja traz a sombra de contato e a luz embaixo do carro, no lugar exato.
  * Medidas em metros; y = 0 e o chao, a camera olha para +z.
+ *
+ * Conferir o encaixe: passe "--conferir" como 2o argumento; desenha o contorno
+ * do carro e os 4 pontos das rodas no chao (nao use essas imagens no app).
  */
 public class GerarFundos {
 
@@ -44,13 +51,18 @@ public class GerarFundos {
     };
 
     // ---- Camera (casada com a foto do carro) e sala
-    static final double V0 = 0.47;     // horizonte (altura do olho) na tela, 0..1
-    static final double F = 1.6;       // distancia focal (em alturas de tela)
-    static final double CAM = 0.8125;  // altura da camera (m)
-    static final double ZW = 10;       // distancia ate a parede do fundo
-    static final double HC = 3.0;      // altura do teto
-    static final double XW = 5.0;      // meia largura da sala
-    static final double PISO = 1.0;    // tamanho da placa do piso
+    static double V0 = 0.319;          // horizonte (altura do olho) na tela, 0..1
+    static double F = 2.28;            // distancia focal (em alturas de tela)
+    static double CAM = 1.44;          // altura da camera (m)
+    static double ZW = 13.5;           // distancia ate a parede do fundo
+    static double HC = 2.75;           // altura do teto
+    static double XW = 5.2;            // meia largura da sala
+    static double PISO = 1.2;          // tamanho da placa do piso
+
+    // ---- Carro no chao (centro entre os eixos, em metros) e direcao da frente
+    static double CARRO_X = 0.395, CARRO_Z = 9.093, CARRO_ANG = Math.toRadians(237.3);
+    static final double FRENTE = 2.30, TRAS = 2.35, MEIA_LARG = 0.90;   // contorno
+    static final double EIXO = 1.35, BITOLA = 0.775;                    // rodas
 
     // Tipos de superficie
     static final int NADA = 0, CHAO = 1, FUNDO = 2, LADO = 3, TETO = 4;
@@ -60,12 +72,19 @@ public class GerarFundos {
 
     public static void main(String[] a) throws Exception {
         File pasta = new File(a.length > 0 ? a[0] : "app/src/main/res/drawable-nodpi");
+        boolean conferir = a.length > 1 && a[1].equals("--conferir");
+        String so = System.getProperty("cor");   // -Dcor=azul gera so uma
+        V0 = num("v0", V0); F = num("f", F); CAM = num("cam", CAM); ZW = num("zw", ZW);
+        CARRO_X = num("cx", CARRO_X); CARRO_Z = num("cz", CARRO_Z);
+        CARRO_ANG = Math.toRadians(num("ang", Math.toDegrees(CARRO_ANG)));
         pasta.mkdirs();
         for (Object[] t : TEMAS) {
+            if (so != null && !so.equals(t[0])) continue;
             L = div((double[]) t[1], 255);
             P = div((double[]) t[2], 255);
             FORCA = (Double) t[3];
             BufferedImage img = gerar();
+            if (conferir) desenharContorno(img);
             File f = new File(pasta, "fundo_" + t[0] + ".jpg");
             salvarJpg(img, f, 0.90f);
             System.out.println(f + "  " + f.length() / 1024 + " KB");
@@ -210,18 +229,79 @@ public class GerarFundos {
         double cos = Math.abs(dy / n);
         double fres = 0.18 + 0.75 * Math.pow(1 - cos, 5);
 
-        // Luz no chao em volta do carro + reflexo alongado da faixa de LED
-        double poca = Math.exp(-sq(x / 2.8) - sq((z - 5.6) / 2.4));
+        // Coordenadas no carro: a = para a frente, b = para o lado
+        double[] ab = noCarro(x, z);
+        double ca = ab[0], cb = ab[1];
+
+        // Luz no chao em volta do carro (segue o comprimento dele) + reflexo
+        // alongado da faixa de LED da parede
+        double poca = 1.35 * Math.exp(-sq((ca + 0.1) / 3.9) - sq(cb / 2.4));
         double estria = Math.exp(-sq(x / 1.5)) * Math.exp(-(ZW - z) / 2.2);
+
+        // Sombra de contato: escura embaixo da carroceria, mais ainda nas rodas
+        double fora = distRet(ca - (FRENTE - TRAS) / 2, cb, (FRENTE + TRAS) / 2 - 0.15, MEIA_LARG - 0.08);
+        double sombra = 0.80 * (1 - suave(-0.55, 0.45, fora))      // embaixo do carro
+                      + 0.35 * Math.exp(-sq(Math.max(fora, 0) / 0.9)); // penumbra larga
+        for (double ra : new double[]{EIXO, -EIXO})
+            for (double rb : new double[]{BITOLA, -BITOLA})
+                sombra += 0.9 * Math.exp(-(sq((ca - ra) / 0.42) + sq((cb - rb) / 0.16)));
+        double luz = 1 - clampD(sombra, 0, 0.94);
 
         double[] c = new double[3];
         for (int k = 0; k < 3; k++) {
             double base = P[k] * (0.22 + 0.10 * clampD(z / ZW, 0, 1)) * peca;
-            c[k] = base + refl[k] * fres + (P[k] * 0.8 + L[k] * 0.20) * poca * 0.75 * FORCA
-                 + L[k] * estria * 0.40 * FORCA;
+            c[k] = (base + refl[k] * fres + (P[k] * 0.8 + L[k] * 0.20) * poca * 0.75 * FORCA) * luz
+                 + L[k] * estria * 0.40 * FORCA * (0.35 + 0.65 * luz);
             c[k] *= (1 - 0.45 * rejunte);
         }
         return c;
+    }
+
+    /** Ponto do chao (x, z) nas coordenadas do carro: {para a frente, para o lado}. */
+    static double[] noCarro(double x, double z) {
+        double fx = Math.cos(CARRO_ANG), fz = Math.sin(CARRO_ANG);
+        double rx = x - CARRO_X, rz = z - CARRO_Z;
+        return new double[]{rx * fx + rz * fz, -rx * fz + rz * fx};
+    }
+
+    /** Distancia com sinal ate um retangulo de cantos arredondados (meias medidas a, b). */
+    static double distRet(double a, double b, double ma, double mb) {
+        double r = 0.35;
+        double qa = Math.abs(a) - (ma - r), qb = Math.abs(b) - (mb - r);
+        double fora = Math.hypot(Math.max(qa, 0), Math.max(qb, 0));
+        return fora + Math.min(Math.max(qa, qb), 0) - r;
+    }
+
+    /** Projeta um ponto do chao do carro (a, b) para pixel da imagem. */
+    static int[] projetar(double a, double b) {
+        double fx = Math.cos(CARRO_ANG), fz = Math.sin(CARRO_ANG);
+        double x = CARRO_X + a * fx - b * fz, z = CARRO_Z + a * fz + b * fx;
+        double asp = (double) W / H;
+        double u = 0.5 + F * x / z / asp, v = V0 + F * CAM / z;
+        return new int[]{(int) Math.round(u * W), (int) Math.round(v * H)};
+    }
+
+    /** Modo conferir: contorno do carro e as rodas desenhados no chao. */
+    static void desenharContorno(BufferedImage img) {
+        java.awt.Graphics2D g = img.createGraphics();
+        g.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setColor(java.awt.Color.YELLOW);
+        double[][] cantos = {{FRENTE, MEIA_LARG}, {FRENTE, -MEIA_LARG}, {-TRAS, -MEIA_LARG}, {-TRAS, MEIA_LARG}};
+        for (int i = 0; i < 4; i++) {
+            int[] p = projetar(cantos[i][0], cantos[i][1]), q = projetar(cantos[(i + 1) % 4][0], cantos[(i + 1) % 4][1]);
+            g.drawLine(p[0], p[1], q[0], q[1]);
+        }
+        g.setColor(java.awt.Color.MAGENTA);
+        for (double ra : new double[]{EIXO, -EIXO})
+            for (double rb : new double[]{BITOLA, -BITOLA}) { int[] p = projetar(ra, rb); g.fillOval(p[0] - 5, p[1] - 5, 10, 10); }
+        g.setColor(java.awt.Color.GREEN);
+        int hy = (int) Math.round(V0 * H); g.drawLine(0, hy, W, hy);
+        g.dispose();
+    }
+
+    static double num(String nome, double padrao) {
+        String s = System.getProperty(nome);
+        return s == null ? padrao : Double.parseDouble(s);
     }
 
     // ------------------------------------------------------------------ utilidades

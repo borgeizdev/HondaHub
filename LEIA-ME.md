@@ -39,7 +39,7 @@ Se o app fechar sozinho: Executar Tarefa > "Ver erros do app (logcat)".
 
 ## 4. Trocar a imagem do carro
 Substitua `app\src\main\res\drawable-nodpi\carro.png` por um PNG com fundo
-transparente (o nome precisa continuar `carro.png`). O reflexo no chão é gerado sozinho.
+transparente (o nome precisa continuar `carro.png`). O reflexo no chão é gerado sozinho. Depois, refaça os papéis de parede (seção 6) para a garagem casar com a nova foto.
 
 ## 5. A tela (igual ao modelo)
 Tudo é posicionado com as coordenadas do modelo (1358 x 681) e esticado para o
@@ -86,3 +86,15 @@ As imagens `fundo_<cor>.jpg` são geradas por `ferramentas\GerarFundos.java`:
 ```
 
 Para uma cor nova: acrescente uma linha em `TEMAS` (no .java) e a mesma cor em `dados/Temas.kt`.
+
+A garagem é desenhada com a mesma câmera da foto do carro (altura 1,44 m,
+horizonte rente ao teto do carro) e já traz a sombra de contato embaixo das rodas.
+**Se trocar o `carro.png`, refaça os fundos**: ajuste `CAM`, `V0`, `F` e `CARRO_*`
+no .java e confira o encaixe com
+
+```powershell
+& "$env:LOCALAPPDATA\Android\jdk-17\bin\java.exe" -Dcor=azul ferramentas\GerarFundos.java conferir --conferir
+```
+
+Isso gera `conferir\fundo_azul.jpg` com o contorno do carro (amarelo), as rodas
+(rosa) e o horizonte (verde) desenhados — as rodas rosa têm que cair embaixo dos pneus.
