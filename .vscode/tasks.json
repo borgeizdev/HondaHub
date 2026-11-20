@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Rodar no celular",
+      "type": "shell",
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ${workspaceFolder}\\rodar.ps1",
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Espelhar tela (scrcpy)",
+      "type": "shell",
+      "command": "scrcpy --stay-awake",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Ver erros do app (logcat)",
+      "type": "shell",
+      "command": "adb logcat -v brief AndroidRuntime:E *:S",
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}

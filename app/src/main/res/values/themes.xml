@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Tema Holo: existe desde o Android 4, entao funciona na central do
+        Civic (Android antigo) e em celulares novos. Sem AppCompat = mais leve.
+    -->
+    <style name="Tema.Launcher" parent="android:Theme.Holo.NoActionBar.Fullscreen">
+        <!-- Cor de fundo enquanto a tela monta -->
+        <item name="android:windowBackground">@color/fundo</item>
+        <!-- SEM animacoes de transicao -->
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowShowWallpaper">false</item>
+    </style>
+</resources>
