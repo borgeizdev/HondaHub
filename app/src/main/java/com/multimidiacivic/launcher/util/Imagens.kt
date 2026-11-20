@@ -1,4 +1,4 @@
-package com.multimidiacivic.launcher
+package com.multimidiacivic.launcher.util
 
 import android.content.res.Resources
 import android.graphics.Bitmap

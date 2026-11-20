@@ -1,4 +1,4 @@
-﻿package com.multimidiacivic.launcher
+package com.multimidiacivic.launcher.tela
 
 import android.content.Context
 import android.graphics.Canvas
@@ -11,6 +11,8 @@ import android.text.TextPaint
 import android.text.TextUtils
 import android.view.MotionEvent
 import android.view.View
+import com.multimidiacivic.launcher.musica.EstadoMusica
+import com.multimidiacivic.launcher.util.Fontes
 
 /**
  * Caixa do player na parte de baixo, da esquerda para a direita:

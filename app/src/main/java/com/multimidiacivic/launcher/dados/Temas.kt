@@ -1,7 +1,8 @@
-package com.multimidiacivic.launcher
+package com.multimidiacivic.launcher.dados
 
 import android.content.ComponentName
 import android.content.Context
+import com.multimidiacivic.launcher.R
 
 /**
  * Um papel de parede "garagem" (imagem em res/drawable-nodpi, gerada por

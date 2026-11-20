@@ -1,4 +1,4 @@
-package com.multimidiacivic.launcher
+package com.multimidiacivic.launcher.dados
 
 import android.content.ComponentName
 import android.content.Context

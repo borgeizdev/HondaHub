@@ -56,20 +56,26 @@ tamanho real da tela — para mexer em posição, veja `montarTela()` no `MainAc
 
 ## Estrutura
 ```
-app/src/main/java/.../
-  MainActivity.kt   monta a tela e liga tudo
-  Tela.kt           posiciona as peças pelas coordenadas do modelo
-  Fundo.kt          papel de parede escolhido
-  Temas.kt          lista de papéis de parede + o que fica salvo
-  Editor.kt         painel do lápis (apps dos botões / papel de parede)
-  Carro.kt          carro + reflexo
-  Botao.kt          botões em trapézio (vidro azul)
-  Icone.kt          ícones desenhados no código
-  Relogio.kt        relógio
-  Player.kt         caixa do player
-  Musica.kt         controle da música dos outros apps
-  Apps.kt           lista os apps instalados
-  Imagens.kt        carrega imagem em segundo plano
+app/src/main/java/com/multimidiacivic/launcher/
+  MainActivity.kt     monta a tela e liga tudo
+  tela/               as peças que aparecem na tela inicial
+    Tela.kt           posiciona as peças pelas coordenadas do modelo
+    Fundo.kt          papel de parede escolhido
+    Carro.kt          carro + reflexo
+    Botao.kt          botões em trapézio (vidro azul)
+    Icone.kt          ícones desenhados no código
+    Relogio.kt        relógio
+    Player.kt         caixa do player
+  editor/
+    Editor.kt         painel do lápis (apps dos botões / papel de parede)
+  musica/
+    Musica.kt         controle da música dos outros apps (+ OuvinteNotificacoes)
+  dados/
+    Apps.kt           lista os apps instalados
+    Temas.kt          lista de papéis de parede + o que fica salvo (Ajustes)
+  util/
+    Fontes.kt         fontes Exo 2 (assets/fontes)
+    Imagens.kt        carrega imagem em segundo plano
 ```
 
 ## 6. Papéis de parede
@@ -79,4 +85,4 @@ As imagens `fundo_<cor>.jpg` são geradas por `ferramentas\GerarFundos.java`:
 & "$env:LOCALAPPDATA\Android\jdk-17\bin\java.exe" ferramentas\GerarFundos.java
 ```
 
-Para uma cor nova: acrescente uma linha em `TEMAS` (no .java) e a mesma cor em `Temas.kt`.
+Para uma cor nova: acrescente uma linha em `TEMAS` (no .java) e a mesma cor em `dados/Temas.kt`.

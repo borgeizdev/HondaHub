@@ -1,4 +1,4 @@
-package com.multimidiacivic.launcher
+package com.multimidiacivic.launcher.editor
 
 import android.app.Activity
 import android.content.Context
@@ -25,6 +25,16 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import com.multimidiacivic.launcher.R
+import com.multimidiacivic.launcher.dados.Ajustes
+import com.multimidiacivic.launcher.dados.App
+import com.multimidiacivic.launcher.dados.Tema
+import com.multimidiacivic.launcher.dados.Temas
+import com.multimidiacivic.launcher.tela.Icone
+import com.multimidiacivic.launcher.tela.Tela
+import com.multimidiacivic.launcher.tela.Vidro
+import com.multimidiacivic.launcher.util.Fontes
+import com.multimidiacivic.launcher.util.Imagens
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

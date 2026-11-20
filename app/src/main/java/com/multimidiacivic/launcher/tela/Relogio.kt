@@ -1,9 +1,10 @@
-package com.multimidiacivic.launcher
+package com.multimidiacivic.launcher.tela
 
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.view.View
+import com.multimidiacivic.launcher.util.Fontes
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date

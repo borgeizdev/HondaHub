@@ -1,4 +1,4 @@
-package com.multimidiacivic.launcher
+package com.multimidiacivic.launcher.musica
 
 import android.annotation.TargetApi
 import android.app.Activity

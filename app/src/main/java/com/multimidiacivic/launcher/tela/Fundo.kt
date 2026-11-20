@@ -1,4 +1,4 @@
-package com.multimidiacivic.launcher
+package com.multimidiacivic.launcher.tela
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -6,6 +6,8 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.view.View
+import com.multimidiacivic.launcher.dados.Tema
+import com.multimidiacivic.launcher.util.Imagens
 
 /**
  * Papel de parede (garagem) da tela inicial.

@@ -10,6 +10,22 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.widget.Toast
+import com.multimidiacivic.launcher.dados.Ajustes
+import com.multimidiacivic.launcher.dados.App
+import com.multimidiacivic.launcher.dados.Apps
+import com.multimidiacivic.launcher.dados.Tema
+import com.multimidiacivic.launcher.editor.Editor
+import com.multimidiacivic.launcher.musica.EstadoMusica
+import com.multimidiacivic.launcher.musica.Musica
+import com.multimidiacivic.launcher.tela.Botao
+import com.multimidiacivic.launcher.tela.Carro
+import com.multimidiacivic.launcher.tela.Fundo
+import com.multimidiacivic.launcher.tela.Icone
+import com.multimidiacivic.launcher.tela.Player
+import com.multimidiacivic.launcher.tela.Relogio
+import com.multimidiacivic.launcher.tela.Tela
+import com.multimidiacivic.launcher.tela.Vidro
+import com.multimidiacivic.launcher.util.Imagens
 
 /**
  * TELA INICIAL (igual ao modelo):

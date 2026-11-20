@@ -1,4 +1,4 @@
-package com.multimidiacivic.launcher
+package com.multimidiacivic.launcher.tela
 
 import android.content.Context
 import android.graphics.Canvas
@@ -11,6 +11,7 @@ import android.graphics.Shader
 import android.text.TextPaint
 import android.text.TextUtils
 import android.view.View
+import com.multimidiacivic.launcher.util.Fontes
 
 /**
  * Pecas de vidro azul (botao em trapezio e a caixa do player):
