@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import com.multimidiacivic.launcher.dados.Ajustes
 import com.multimidiacivic.launcher.dados.App
@@ -25,6 +26,7 @@ import com.multimidiacivic.launcher.tela.Fundo
 import com.multimidiacivic.launcher.tela.Icone
 import com.multimidiacivic.launcher.tela.Player
 import com.multimidiacivic.launcher.tela.Relogio
+import com.multimidiacivic.launcher.tela.Splash
 import com.multimidiacivic.launcher.tela.Tela
 import com.multimidiacivic.launcher.tela.Vidro
 import com.multimidiacivic.launcher.util.Imagens
@@ -55,6 +57,11 @@ class MainActivity : Activity() {
     private var apps: List<App?> = emptyList()
     private var precisaRecarregar = true
 
+    // Splash: some quando o fundo, o carro e os apps estiverem prontos
+    private var splash: Splash? = null
+    private val faltaCarregar = hashSetOf("fundo", "carro", "apps")
+    private var inicio = 0L
+
     /** App instalado / removido / atualizado -> refaz os botoes. */
     private val avisoApps = object : BroadcastReceiver() {
         override fun onReceive(c: Context, i: Intent) {
@@ -71,6 +78,7 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(montarTela())
+        mostrarSplash()
         aplicarTema(Ajustes.tema(this))
         editor = Editor(this, { todosApps }, { apps }, { t -> aplicarTema(t) }, { distribuirApps() }, { cobre -> cobrirTela(cobre) })
         gaveta = Gaveta(this, { todosApps }, { cobre -> cobrirTela(cobre) })
@@ -97,6 +105,29 @@ class MainActivity : Activity() {
         else registerReceiver(avisoApps, filtro)
     }
 
+    /** Boas-vindas por cima da tela enquanto ela carrega. */
+    private fun mostrarSplash() {
+        val s = Splash(this)
+        splash = s
+        inicio = System.currentTimeMillis()
+        addContentView(s, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        fundo.aoCarregar = { pronto("fundo") }
+        s.postDelayed({ tirarSplash() }, 5000) // nunca fica presa
+    }
+
+    private fun pronto(parte: String) {
+        if (!faltaCarregar.remove(parte) || faltaCarregar.isNotEmpty()) return
+        // Fica pelo menos 1,5 s para a animacao nao piscar
+        val resta = 1500 - (System.currentTimeMillis() - inicio)
+        if (resta > 0) splash?.postDelayed({ tirarSplash() }, resta) else tirarSplash()
+    }
+
+    private fun tirarSplash() {
+        splash?.sair()
+        splash = null
+        fundo.aoCarregar = null
+    }
+
     private fun montarTela(): View {
         tela = Tela(this)
         fundo = Fundo(this)
@@ -107,7 +138,7 @@ class MainActivity : Activity() {
         tela.colocar(carro, 362f, 228f, 996f, 515f)
         Imagens.emSegundoPlano(
             { Imagens.decodificarRecurso(resources, R.drawable.carro, 4000, 4000, comTransparencia = true) },
-            { bmp -> if (bmp != null) carro.mostrar(bmp) }
+            { bmp -> if (bmp != null) carro.mostrar(bmp); pronto("carro") }
         )
 
         // Icones: area de toque de 64 x 64 em volta do centro (o desenho ocupa metade)
@@ -194,6 +225,7 @@ class MainActivity : Activity() {
             distribuirApps()
             editor.atualizarLista()
             gaveta.atualizarLista()
+            pronto("apps")
         }
     }
 

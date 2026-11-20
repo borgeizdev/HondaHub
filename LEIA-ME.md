@@ -41,6 +41,12 @@ Se o app fechar sozinho: Executar Tarefa > "Ver erros do app (logcat)".
 Substitua `app\src\main\res\drawable-nodpi\carro.png` por um PNG com fundo
 transparente (o nome precisa continuar `carro.png`). O reflexo no chão é gerado sozinho. Depois, refaça os papéis de parede (seção 6) para a garagem casar com a nova foto.
 
+## Tela de boas-vindas
+Ao abrir, aparece "Bem-vindo a bordo" enquanto o papel de parede, o carro e os apps carregam
+(some sozinha: no mínimo 1,5 s, no máximo 5 s). Para ter um logo no meio, coloque um PNG
+com fundo transparente em `app\src\main\res\drawable-nodpi\logo.png`; sem ele aparece um
+emblema simples "CIVIC". Os textos ficam em `tela/Splash.kt`.
+
 ## 5. A tela (igual ao modelo)
 Tudo é posicionado com as coordenadas do modelo (1358 x 681) e esticado para o
 tamanho real da tela — para mexer em posição, veja `montarTela()` no `MainActivity.kt`.
@@ -60,6 +66,7 @@ app/src/main/java/com/multimidiacivic/launcher/
   MainActivity.kt     monta a tela e liga tudo
   tela/               as peças que aparecem na tela inicial
     Tela.kt           posiciona as peças pelas coordenadas do modelo
+    Splash.kt         boas-vindas enquanto a tela carrega
     Fundo.kt          papel de parede escolhido
     Carro.kt          carro + reflexo
     Botao.kt          botões em trapézio (vidro azul)

@@ -23,6 +23,9 @@ class Fundo(ctx: Context) : View(ctx) {
     private val destino = Rect()
     private val pinta = Paint(Paint.FILTER_BITMAP_FLAG or Paint.DITHER_FLAG)
 
+    /** Chamado quando o papel de parede termina de carregar (usado pela splash). */
+    var aoCarregar: (() -> Unit)? = null
+
     fun mostrar(t: Tema) {
         tema = t
         carregar()
@@ -44,6 +47,7 @@ class Fundo(ctx: Context) : View(ctx) {
                     imagem = bmp
                     ajustarCorte()
                     invalidate()
+                    aoCarregar?.invoke()
                 } else bmp?.recycle()
             }
         )
