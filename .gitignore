@@ -8,3 +8,4 @@ assinatura.properties
 *.jks
 *.keystore
 !site/HondaHub.apk
+CLAUDE.md
