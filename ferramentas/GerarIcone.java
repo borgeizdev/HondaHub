@@ -11,9 +11,9 @@ import javax.imageio.ImageIO;
  *   & "$env:LOCALAPPDATA\Android\jdk-17\bin\java.exe" ferramentas\GerarIcone.java
  *
  * Saida em app/src/main/res:
- *  - mipmap-<densidade>/ic_launcher.png          quadrado branco arredondado + simbolo (Android antigo)
+ *  - mipmap-<densidade>/ic_launcher.png          quadrado arredondado (COR_FUNDO) + simbolo (COR_SIMBOLO) (Android antigo)
  *  - mipmap-<densidade>/ic_launcher_frente.png   so o simbolo, na area segura (icone adaptavel, Android 8+)
- *  - mipmap-anydpi-v26/ic_launcher.xml           fundo branco + simbolo (o Android recorta no formato dele)
+ *  - mipmap-anydpi-v26/ic_launcher.xml           fundo (cor icone_fundo) + simbolo (o Android recorta no formato dele)
  */
 public class GerarIcone {
 
@@ -21,9 +21,15 @@ public class GerarIcone {
     static final double[] FATOR = {1, 1.5, 2, 3, 4};
     /** Giro do simbolo em graus, sentido horario (90 = a ponta, que no arquivo aponta para a direita, aponta para baixo). */
     static final int GIRO = 90;
+    /** Cores: fundo do quadrado e cor do simbolo (o desenho do logo-app.png e pintado com ela). */
+    static final Color COR_FUNDO = new Color(0x1B1C21);
+    static final Color COR_SIMBOLO = Color.WHITE;
+    /** Tamanho do simbolo (fracao do quadrado) e quanto ele desce do centro (fracao do icone). */
+    static final double TAMANHO = 0.58;
+    static final double DESCIDA = 0.035;
 
     public static void main(String[] a) throws Exception {
-        BufferedImage logo = girar(recortar(ImageIO.read(new File("ferramentas/logo-app.png"))), GIRO);
+        BufferedImage logo = pintar(girar(recortar(ImageIO.read(new File("ferramentas/logo-app.png"))), GIRO), COR_SIMBOLO);
         File res = new File("app/src/main/res");
         for (int i = 0; i < DENS.length; i++) {
             File pasta = new File(res, "mipmap-" + DENS[i]);
@@ -36,15 +42,15 @@ public class GerarIcone {
         }
     }
 
-    /** Quadrado branco de cantos arredondados com o simbolo no meio (64% do lado). */
+    /** Quadrado de cantos arredondados (COR_FUNDO) com o simbolo um pouco abaixo do meio. */
     static BufferedImage classico(BufferedImage logo, int t) {
         BufferedImage o = new BufferedImage(t, t, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = qualidade(o.createGraphics());
         double m = t * 0.04; // folga em volta, como os icones do sistema
         double lado = t - 2 * m;
-        g.setColor(Color.WHITE);
+        g.setColor(COR_FUNDO);
         g.fill(new RoundRectangle2D.Double(m, m, lado, lado, lado * 0.42, lado * 0.42));
-        desenharCentro(g, logo, t, lado * 0.64);
+        desenharCentro(g, logo, t, lado * TAMANHO);
         g.dispose();
         return o;
     }
@@ -53,7 +59,7 @@ public class GerarIcone {
     static BufferedImage frente(BufferedImage logo, int t) {
         BufferedImage o = new BufferedImage(t, t, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = qualidade(o.createGraphics());
-        desenharCentro(g, logo, t, t * 46.0 / 108.0);
+        desenharCentro(g, logo, t, t * 42.0 / 108.0); // area segura: 66 dp
         g.dispose();
         return o;
     }
@@ -70,7 +76,16 @@ public class GerarIcone {
             gm.dispose();
             img = meio;
         }
-        g.drawImage(img, (int) Math.round((t - w) / 2), (int) Math.round((t - h) / 2), (int) Math.round(w), (int) Math.round(h), null);
+        g.drawImage(img, (int) Math.round((t - w) / 2), (int) Math.round((t - h) / 2 + t * DESCIDA), (int) Math.round(w), (int) Math.round(h), null);
+    }
+
+    /** Pinta o simbolo de [cor], mantendo a transparencia (o contorno suave continua suave). */
+    static BufferedImage pintar(BufferedImage im, Color cor) {
+        int rgb = cor.getRGB() & 0xFFFFFF;
+        BufferedImage o = new BufferedImage(im.getWidth(), im.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        for (int y = 0; y < im.getHeight(); y++)
+            for (int x = 0; x < im.getWidth(); x++) o.setRGB(x, y, (im.getRGB(x, y) & 0xFF000000) | rgb);
+        return o;
     }
 
     /** Gira [im] em multiplos de 90 graus (sentido horario), sem perder nitidez. */

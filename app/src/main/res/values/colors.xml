@@ -2,5 +2,5 @@
 <resources>
     <color name="fundo">#05070C</color>
     <!-- Fundo do icone do app (atras do simbolo) -->
-    <color name="icone_fundo">#FFFFFF</color>
+    <color name="icone_fundo">#1B1C21</color>
 </resources>
