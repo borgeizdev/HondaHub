@@ -11,7 +11,8 @@
 
 <br>
 
-## Stack
+<a id="stack"></a>
+<h2 align="center">Stack</h2>
 
 <p align="center">
   <a href="https://skillicons.dev">
@@ -30,7 +31,10 @@
   Android puro + Kotlin, <b>sem nenhuma biblioteca externa</b>, para rodar leve até em centrais antigas (Android 4.2+).
 </p>
 
-## Funcionalidades
+<a id="funcionalidades"></a>
+<h2 align="center">Funcionalidades</h2>
+
+<div align="center">
 
 | | |
 |---|---|
@@ -45,7 +49,10 @@
 | **Launcher de verdade** | vira a tela inicial no botão Home do Android, e o Voltar nunca sai dela |
 | **Leve** | painéis montados uma vez só, grade de apps reciclável e imagens lidas no tamanho da tela, para não travar em central fraca |
 
-## Arquitetura / Estrutura
+</div>
+
+<a id="arquitetura--estrutura"></a>
+<h2 align="center">Arquitetura / Estrutura</h2>
 
 <details>
 <summary><b>Ver estrutura de pastas</b></summary>
@@ -87,7 +94,8 @@ ferramentas/
 
 </details>
 
-## Como rodar
+<a id="como-rodar"></a>
+<h2 align="center">Como rodar</h2>
 
 <details>
 <summary><b>Ver passo a passo</b></summary>
