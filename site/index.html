@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B0C10">
+<title>HondaHub – Baixar</title>
+<meta name="description" content="Baixe o HondaHub, a tela inicial para a central multimídia do Civic.">
+<link rel="icon" type="image/png" href="icone.png">
+<link rel="apple-touch-icon" href="icone.png">
+<style>
+  /* Feito para abrir ate no navegador antigo das centrais (Android 4.x):
+     sem variaveis CSS, sem grid, sem flex gap. */
+  @font-face { font-family: "Exo2"; font-weight: 500; src: url("fontes/exo2_medium.ttf") format("truetype"); }
+  @font-face { font-family: "Exo2"; font-weight: 600; src: url("fontes/exo2_semibold.ttf") format("truetype"); }
+
+  * { -webkit-box-sizing: border-box; box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #0B0C10;
+    color: #E8EAEE;
+    font-family: "Exo2", "Segoe UI", Roboto, Arial, sans-serif;
+    font-weight: 500;
+    -webkit-text-size-adjust: 100%;
+  }
+  .pagina { max-width: 620px; margin: 0 auto; padding: 24px 16px 32px; text-align: center; }
+
+  .banner {
+    display: block; width: 100%; height: auto;
+    -webkit-border-radius: 14px; border-radius: 14px;
+    border: 1px solid #1E2027;
+  }
+  .frase { margin: 22px 0 22px; font-size: 17px; color: #A9AEB8; line-height: 1.45; }
+
+  .baixar {
+    display: inline-block;
+    min-width: 280px;
+    padding: 18px 34px;
+    background: #D7111E;
+    color: #FFFFFF;
+    font-weight: 600; font-size: 21px; letter-spacing: 0.02em;
+    text-decoration: none;
+    -webkit-border-radius: 12px; border-radius: 12px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .baixar:hover { background: #E41B28; }
+  .baixar:active { background: #B30E19; }
+  .baixar .seta { display: inline-block; margin-right: 10px; vertical-align: -3px; }
+  .info { margin: 12px 0 0; font-size: 14px; color: #7C818C; }
+
+  .aviso {
+    display: none;
+    margin: 22px auto 0; max-width: 460px; padding: 12px 16px;
+    background: #15171D; border: 1px solid #23262E;
+    -webkit-border-radius: 10px; border-radius: 10px;
+    font-size: 14px; color: #A9AEB8; line-height: 1.45;
+  }
+
+  .passos {
+    margin: 34px auto 0; max-width: 460px; padding: 20px 22px;
+    background: #121419; border: 1px solid #1E2027;
+    -webkit-border-radius: 14px; border-radius: 14px;
+    text-align: left;
+  }
+  .passos h2 { margin: 0 0 14px; font-size: 16px; font-weight: 600; color: #FFFFFF; letter-spacing: 0.04em; text-transform: uppercase; }
+  .passo { position: relative; padding: 0 0 0 40px; margin: 0 0 14px; font-size: 15px; line-height: 1.45; color: #C5C9D1; }
+  .passo:last-child { margin-bottom: 0; }
+  .passo .n {
+    position: absolute; left: 0; top: -1px;
+    width: 26px; height: 26px; line-height: 26px; text-align: center;
+    background: #23262E; color: #FFFFFF; font-weight: 600; font-size: 14px;
+    -webkit-border-radius: 13px; border-radius: 13px;
+  }
+  .passo b { color: #FFFFFF; font-weight: 600; }
+
+  .rodape { margin: 30px 0 0; font-size: 13px; color: #5F646E; }
+  .rodape b { color: #8C919B; font-weight: 600; }
+
+  /* Tela de carro (larga e baixa): banner ao lado do botao, tudo cabe sem rolar */
+  @media (min-width: 900px) and (max-height: 760px) {
+    .pagina { max-width: 1100px; padding-top: 28px; }
+    .topo { overflow: hidden; }
+    .topo .lado-banner { float: left; width: 56%; }
+    .topo .lado-baixar { float: right; width: 40%; padding-top: 34px; }
+    .frase { margin-top: 0; }
+    .passos { max-width: 720px; margin-top: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="pagina">
+
+  <div class="topo">
+    <div class="lado-banner">
+      <img class="banner" src="banner.jpg" width="1600" height="639" alt="HondaHub rodando na central multimídia do Civic">
+    </div>
+
+    <div class="lado-baixar">
+      <p class="frase">A tela inicial da central multimídia do Civic.<br>Instale direto no carro ou no celular.</p>
+
+      <a class="baixar" href="HondaHub.apk" download="HondaHub.apk">
+        <svg class="seta" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v11M5 8.5l5 5 5-5M3 17.5h14" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Baixar HondaHub
+      </a>
+      <p class="info">Versão <!--versao-->0.2<!--/versao--> · <!--tamanho-->2,5 MB<!--/tamanho--> · Android 4.2 ou mais novo</p>
+
+      <p class="aviso" id="aviso">O HondaHub é um app de <b>Android</b>. Abra este endereço no navegador da central do carro ou de um celular Android para instalar.</p>
+    </div>
+  </div>
+
+  <div class="passos">
+    <h2>Como instalar</h2>
+    <p class="passo"><span class="n">1</span>Toque em <b>Baixar HondaHub</b>. Se o navegador avisar que o arquivo pode ser perigoso, toque em <b>Baixar mesmo assim</b> (o aviso aparece para todo app fora da Play Store).</p>
+    <p class="passo"><span class="n">2</span>Abra o arquivo baixado e, se pedir, permita <b>instalar apps desta fonte</b>. Depois toque em <b>Instalar</b>.</p>
+    <p class="passo"><span class="n">3</span>Aperte o botão <b>Home</b> e escolha <b>HondaHub › Sempre</b>. Pronto, ele vira a tela inicial.</p>
+  </div>
+
+  <p class="rodape">Feito por <b>@borgeizdev</b></p>
+</div>
+
+<script>
+  // Fora do Android (PC, iPhone) o APK nao instala: avisa em vez de so baixar.
+  (function () {
+    var ua = navigator.userAgent || "";
+    if (!/android/i.test(ua)) document.getElementById("aviso").style.display = "block";
+  })();
+</script>
+</body>
+</html>

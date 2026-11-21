@@ -1,11 +1,30 @@
-﻿plugins {
+import java.util.Properties
+
+plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+}
+
+// Chave da versao final: lida de assinatura.properties (fora do git).
+val assinatura = Properties().apply {
+    val f = rootProject.file("assinatura.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
 }
 
 android {
     namespace = "com.multimidiacivic.launcher"
     compileSdk = 34
+
+    signingConfigs {
+        create("hondahub") {
+            // Sem o arquivo, so a versao final falha (de proposito: assinar com outra
+            // chave faria a atualizacao nao instalar por cima no carro).
+            assinatura.getProperty("arquivo")?.let { storeFile = file(it) }
+            storePassword = assinatura.getProperty("senha")
+            keyAlias = assinatura.getProperty("apelido")
+            keyPassword = assinatura.getProperty("senha")
+        }
+    }
 
     defaultConfig {
         applicationId = "com.multimidiacivic.launcher"
@@ -21,7 +40,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("hondahub")
         }
     }
 

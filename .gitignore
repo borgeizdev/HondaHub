@@ -4,3 +4,7 @@ app/build/
 local.properties
 *.apk
 .kotlin/
+assinatura.properties
+*.jks
+*.keystore
+!site/HondaHub.apk
