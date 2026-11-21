@@ -1,4 +1,4 @@
-﻿# Multimidia Civic – Launcher leve para central multimídia
+﻿# HondaHub – Launcher leve para central multimídia
 
 ## 1. Instalar o ambiente (só uma vez)
 No terminal do VS Code (PowerShell), dentro da pasta do projeto:
