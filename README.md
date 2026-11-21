@@ -51,8 +51,7 @@
 
 </div>
 
-<a id="arquitetura--estrutura"></a>
-<h2 align="center">Arquitetura / Estrutura</h2>
+## Arquitetura / Estrutura
 
 <details>
 <summary><b>Ver estrutura de pastas</b></summary>
@@ -94,8 +93,7 @@ ferramentas/
 
 </details>
 
-<a id="como-rodar"></a>
-<h2 align="center">Como rodar</h2>
+## Como rodar
 
 <details>
 <summary><b>Ver passo a passo</b></summary>
