@@ -19,9 +19,11 @@ public class GerarIcone {
 
     static final String[] DENS = {"mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"};
     static final double[] FATOR = {1, 1.5, 2, 3, 4};
+    /** Giro do simbolo em graus, sentido horario (90 = a ponta, que no arquivo aponta para a direita, aponta para baixo). */
+    static final int GIRO = 90;
 
     public static void main(String[] a) throws Exception {
-        BufferedImage logo = recortar(ImageIO.read(new File("ferramentas/logo-app.png")));
+        BufferedImage logo = girar(recortar(ImageIO.read(new File("ferramentas/logo-app.png"))), GIRO);
         File res = new File("app/src/main/res");
         for (int i = 0; i < DENS.length; i++) {
             File pasta = new File(res, "mipmap-" + DENS[i]);
@@ -69,6 +71,19 @@ public class GerarIcone {
             img = meio;
         }
         g.drawImage(img, (int) Math.round((t - w) / 2), (int) Math.round((t - h) / 2), (int) Math.round(w), (int) Math.round(h), null);
+    }
+
+    /** Gira [im] em multiplos de 90 graus (sentido horario), sem perder nitidez. */
+    static BufferedImage girar(BufferedImage im, int graus) {
+        int voltas = ((graus / 90) % 4 + 4) % 4;
+        for (int v = 0; v < voltas; v++) {
+            int w = im.getWidth(), h = im.getHeight();
+            BufferedImage o = new BufferedImage(h, w, BufferedImage.TYPE_INT_ARGB);
+            for (int y = 0; y < h; y++)
+                for (int x = 0; x < w; x++) o.setRGB(h - 1 - y, x, im.getRGB(x, y));
+            im = o;
+        }
+        return im;
     }
 
     /** Corta as sobras transparentes em volta do simbolo. */
