@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="fundo">#05070C</color>
+    <!-- Fundo do icone do app (atras do simbolo) -->
+    <color name="icone_fundo">#FFFFFF</color>
 </resources>

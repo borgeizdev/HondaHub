@@ -111,3 +111,14 @@ no .java e confira o encaixe com
 
 Isso gera `conferir\fundo_azul.jpg` com o contorno do carro (amarelo), as rodas
 (rosa) e o horizonte (verde) desenhados — as rodas rosa têm que cair embaixo dos pneus.
+
+## 7. Ícone do app
+O ícone sai de `ferramentas\logo-app.png` (símbolo com fundo transparente). Para trocar,
+substitua esse arquivo e rode:
+
+```powershell
+& "$env:LOCALAPPDATA\Android\jdk-17\bin\java.exe" ferramentas\GerarIcone.java
+```
+
+Ele gera todos os tamanhos em `res\mipmap-*` (quadrado branco arredondado com o símbolo) e a
+versão adaptável do Android 8+, que o próprio sistema recorta no formato dele.
