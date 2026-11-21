@@ -6,7 +6,7 @@
   <a href="#stack"><b>Stack</b></a> ·
   <a href="#funcionalidades"><b>Funcionalidades</b></a> ·
   <a href="#arquitetura--estrutura"><b>Estrutura</b></a> ·
-  <a href="#como-rodar"><b>Como rodar</b></a>
+  <a href="#baixar"><b>Baixar</b></a>
 </p>
 
 <br>
@@ -93,54 +93,19 @@ ferramentas/
 
 </details>
 
-## Como rodar
+<a id="baixar"></a>
+<h2 align="center">Baixar</h2>
 
-<details>
-<summary><b>Ver passo a passo</b></summary>
-<br>
+<p align="center">
+  <a href="https://hondahub-site.vercel.app/">
+    <img src="https://img.shields.io/badge/Baixar%20HondaHub-D7111E?style=for-the-badge&logo=android&logoColor=white" alt="Baixar HondaHub" height="44">
+  </a>
+</p>
 
-### 1. Ambiente <sub>(só uma vez)</sub>
-
-No terminal do VS Code (PowerShell), dentro da pasta do projeto:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File ferramentas\setup-ambiente.ps1
-```
-
-Instala na sua pasta de usuário, **sem precisar ser administrador**: JDK 17, Android SDK (adb, android-34, build-tools 34), as variáveis `JAVA_HOME` / `ANDROID_HOME` e o [scrcpy](https://github.com/Genymobile/scrcpy) para espelhar a tela. Depois, feche e abra o VS Code. O Gradle baixa sozinho pelo `gradlew.bat`.
-
-### 2. Aparelho
-
-1. Configurações › Sobre › toque **7 vezes** em *Número da versão* para liberar o modo desenvolvedor.
-2. Opções do desenvolvedor › ligue **Depuração USB**.
-3. Conecte um cabo **de dados** e aceite *"Permitir depuração USB"* na tela.
-
-### 3. Compilar, instalar e abrir
-
-```powershell
-.\rodar.ps1            # versão de teste
-.\rodar.ps1 -Release   # versão final otimizada (bem menor)
-```
-
-Também funciona com dois cliques em `rodar.bat` ou **Ctrl + Shift + B** no VS Code. O script compila, espera o aparelho, instala e abre o app, e explica o que fazer se algo falhar. Em *Terminal › Executar Tarefa* há ainda **Espelhar tela (scrcpy)** e **Ver erros do app (logcat)**.
-
-### 4. Instalar no carro
-
-1. Gere a versão final com `.\rodar.ps1 -Release`.
-2. Envie `app\build\outputs\apk\release\app-release.apk` para a central (pelo Google Drive, por exemplo) e abra pelo navegador.
-3. Aperte o botão **Home** e escolha **HondaHub › Sempre**.
-4. Toque no nome da música no player e libere **Acesso a notificações**, para aparecer o que está tocando.
-
-### Trocar as imagens
-
-| O quê | Como |
-|---|---|
-| **Foto do carro** | substitua `res\drawable-nodpi\carro.png` (PNG com fundo transparente) e refaça as garagens |
-| **Garagens** | `java ferramentas\GerarFundos.java` (cores na lista `TEMAS` e em `dados/Temas.kt`) |
-| **Logo da splash** | `res\drawable-nodpi\logo.png`; tamanho e textos em `tela/Splash.kt` |
-| **Ícone do app** | substitua `ferramentas\logo-app.png` e rode `java ferramentas\GerarIcone.java` |
-
-</details>
+<p align="center">
+  Abra <a href="https://hondahub-site.vercel.app/"><b>hondahub-site.vercel.app</b></a> no navegador da central do carro ou de um celular Android e toque em <b>Baixar HondaHub</b>.<br>
+  Depois de instalar, aperte o botão <b>Home</b> e escolha <b>HondaHub › Sempre</b>.
+</p>
 
 <br>
 
